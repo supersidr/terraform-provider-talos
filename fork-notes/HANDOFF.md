@@ -1,6 +1,6 @@
 # Форк terraform-provider-talos: контекст для продолжения
 
-Дата: 2026-11-06. Ветка: `fork/okko-issues` (от `main` = v0.12.0-4-g77d43fb; upstream/main впереди на
+Дата: 2026-11-06. Ветка: `fork/k8s-registries` (бывш. `fork/okko-issues`) (от `main` = v0.12.0-4-g77d43fb; upstream/main впереди на
 1 коммит — d0d4997, bump klauspost/compress).
 
 ## Откуда задача
@@ -47,6 +47,15 @@ Pulumi-SDK. etcd 3.7 на Talos 1.13 и битые образы в registry — 
 - Talos server dry-run: `internal/app/machined/internal/server/v1alpha1/v1alpha1_server.go:254`
   (`generateDiff` — diff НЕ redacted).
 
+## Правила upstream (.conform.yaml)
+
+- Один коммит на PR; conventional header ≤89 символов, lower case, без точки; тело обязательно.
+- DCO: `git commit -s`. GPG-подпись: `required`, но identity привязана к org siderolabs — внешним
+  контрибьюторам, судя по истории, мейнтейнер переподписывает (в коммитах второй `Signed-off-by` Noel Georgi).
+- CI: `make check-dirty` (go generate + tfplugindocs → дерево не должно меняться), govulncheck,
+  golangci-lint latest (v2 конфиг; v2.6 не знает `exhaustruct_v5`).
+- Именования веток не регламентированы.
+
 ## Сборка и проверка
 
 - Go 1.26.10 (toolchain скачивается автоматически). Unit-тесты: `go test ./pkg/talos/ -run <Name>`.
@@ -57,8 +66,9 @@ Pulumi-SDK. etcd 3.7 на Talos 1.13 и битые образы в registry — 
 
 ## Статус
 
-- **01 — сделано** в ветке `feat/talos-cluster-k8s-images` (от `main`, без fork-notes — пригодна для PR
-  в upstream), коммит 119867c. Атрибуты `Optional` без Computed/Default: null = константы Talos, у
+- **01 — сделано** в ветке `feat/talos-cluster-k8s-images`: перебазирована на upstream/main (d0d4997),
+  один коммит 69020e4 с `Signed-off-by` (DCO), запушена в origin. Текст PR —
+  `fork-notes/PR-01-talos-cluster-k8s-images.md`, ссылка на создание PR — в его первой строке. Атрибуты `Optional` без Computed/Default: null = константы Talos, у
   существующего state нет diff. Валидатор `imageRepositoryValid` (util.go) отвергает тег/digest/пустую
   строку. Unit-тесты: `talos_cluster_upgrade_options_internal_test.go`. Доки `docs/resources/cluster.md`
   перегенерированы. Не проверено на живом кластере; не запушено.
