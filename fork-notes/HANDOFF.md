@@ -55,8 +55,19 @@ Pulumi-SDK. etcd 3.7 на Talos 1.13 и битые образы в registry — 
 - Проверка в Pulumi: собрать бинарник, положить как плагин `pulumi-resource-terraform-provider`
   с параметризацией на локальный путь — см. память pulumi-modules «Локальные SDK: --no-build-isolation».
 
+## Статус
+
+- **01 — сделано** в ветке `feat/talos-cluster-k8s-images` (от `main`, без fork-notes — пригодна для PR
+  в upstream), коммит 119867c. Атрибуты `Optional` без Computed/Default: null = константы Talos, у
+  существующего state нет diff. Валидатор `imageRepositoryValid` (util.go) отвергает тег/digest/пустую
+  строку. Unit-тесты: `talos_cluster_upgrade_options_internal_test.go`. Доки `docs/resources/cluster.md`
+  перегенерированы. Не проверено на живом кластере; не запушено.
+- `go test ./pkg/talos/` без кластера: падают `TestAccTalosMachineSecretsResourceUpgrade1..3` — так же на
+  чистом `main`, не регрессия.
+
 ## Следующие шаги
 
-1. Согласовать с пользователем дизайн issue 04 (вариант B: `machine_configuration_live`, redacted).
-2. Реализовать 01 (маленький PR, кандидат в upstream).
+1. Проверить 01 на тестовом кластере (через Pulumi: `talos.Cluster` с `*_image` из registry.playteam.ru)
+   и решить, отправлять ли PR в upstream.
+2. Согласовать с пользователем дизайн issue 04 (вариант B: `machine_configuration_live`, redacted).
 3. 02 и 03 — по желанию, тоже кандидаты в upstream.
